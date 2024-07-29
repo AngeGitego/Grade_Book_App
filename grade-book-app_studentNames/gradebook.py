@@ -9,10 +9,16 @@ class GradeBook:
         self.course_list = []
 
     def add_student(self, email, names):
+        if any(s.email == email for s in self.student_list):
+            print("Student already exists.")
+            return
         new_student = Student(email, names)
         self.student_list.append(new_student)
 
     def add_course(self, course):
+        if any(c.name == course.name for c in self.course_list):
+            print("Course already exists.")
+            return
         self.course_list.append(course)
 
     def register_student_for_course(self, student_email, course_name, grade):
