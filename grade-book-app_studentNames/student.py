@@ -1,25 +1,37 @@
 #!/usr/bin/env python3
 
+import sqlite3
+
 class Student:
     def __init__(self, email, names):
         self.email = email
         self.names = names
         self.courses_registered = []
-        self.GPA = 0.0
-
-    def register_for_course(self, course, grade):
-        self.courses_registered.append({'course': course, 'grade': grade})
-        self.calculate_GPA()
-
+        self.gpa = 0.0
+    
     def calculate_GPA(self):
-        if not self.courses_registered:
-            self.GPA = 0.0
-            return
-
-        total_credits = sum(course['course'].credits for course in self.courses_registered)
-        total_points = sum(course['grade'] * course['course'].credits for course in self.courses_registered)
-
-        if total_credits > 0:
-            self.GPA = total_points / total_credits
-        else:
-            self.GPA = 0.0
+        conn = sqlite3.connect('gradebook.db')
+        cursor = conn.cursor()
+        
+        cursor.execute('''SELECT SUM(c.credits * r.grade) / SUM(c.credits) 
+                          FROM registrations r 
+                          JOIN courses c ON r.course_id = c.id 
+                          WHERE r.student_email = ?''', (self.email,))
+        
+        result = cursor.fetchone()
+        self.gpa = result[0] if result[0] is not null else 0.0
+        
+        cursor.execute('UPDATE students SET gpa = ? WHERE email = ?', (self.gpa, self.email))
+        conn.commit()
+        conn.close()
+    
+    def register_for_course(self, course_id, grade):
+        conn = sqlite3.connect('gradebook.db')
+        cursor = conn.cursor()
+        
+        cursor.execute('INSERT INTO registrations (student_email, course_id, grade) VALUES (?, ?, ?)', 
+                       (self.email, course_id, grade))
+        
+        conn.commit()
+        conn.close()
+        self.calculate_GPA()
