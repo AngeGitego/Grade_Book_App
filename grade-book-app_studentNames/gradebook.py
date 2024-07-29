@@ -20,6 +20,7 @@ class GradeBook:
         course = next((c for c in self.course_list if c.name == course_name), None)
         if student and course:
             student.register_for_course(course, grade)
+            return True
         return False
 
     def calculate_ranking(self):
