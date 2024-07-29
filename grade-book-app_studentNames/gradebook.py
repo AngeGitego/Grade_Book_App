@@ -24,22 +24,21 @@ class GradeBook:
         return False
 
     def calculate_ranking(self):
-        return sorted(self.student_list, key=lambda s: s.GPA, reverse=True)
+        sorted_students = sorted(self.student_list, key=lambda s: s.GPA, reverse=True)
+        for rank, student in enumerate(sorted_students, start=1):
+            print(f"Rank {rank}: {student.names} - GPA: {student.GPA:.2f}")
 
-    def search_by_grade(self, course_name, grade):
-        results = []
-        for student in self.student_list:
-            for course in student.courses_registered:
-                if course['course'].name == course_name and course['grade'] == grade:
-                    results.append(student)
-        return results
+    def search_by_grade(self, course_name, grade_threshold):
+        students = [s for s in self.student_list if any(c['course'].name == course_name and c['grade'] >= grade_threshold for c in s.courses_registered)]
+        for student in students:
+            print(f"{student.names} - Email: {student.email}")
 
     def generate_transcript(self, student_email):
         student = next((s for s in self.student_list if s.email == student_email), None)
         if student:
-            transcript = f"Transcript for {student.names}:\n"
+            print(f"Transcript for {student.names}:")
             for course in student.courses_registered:
-                transcript += f"{course['course'].name}: {course['grade']}\n"
-            transcript += f"GPA: {student.GPA}\n"
-            return transcript
-        return "Student not found."
+                print(f"Course: {course['course'].name}, Trimester: {course['course'].trimester}, Credits: {course['course'].credits}, Grade: {course['grade']}")
+            print(f"GPA: {student.GPA:.2f}")
+        else:
+            print("Student not found.")
