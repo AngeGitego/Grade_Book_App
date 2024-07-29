@@ -6,7 +6,6 @@ class Student:
     def __init__(self, email, names):
         self.email = email
         self.names = names
-        self.courses_registered = []
         self.gpa = 0.0
     
     def calculate_GPA(self):
@@ -19,7 +18,7 @@ class Student:
                           WHERE r.student_email = ?''', (self.email,))
         
         result = cursor.fetchone()
-        self.gpa = result[0] if result[0] is not null else 0.0
+        self.gpa = result[0] if result[0] is not None else 0.0
         
         cursor.execute('UPDATE students SET gpa = ? WHERE email = ?', (self.gpa, self.email))
         conn.commit()
@@ -35,3 +34,4 @@ class Student:
         conn.commit()
         conn.close()
         self.calculate_GPA()
+
