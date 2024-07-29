@@ -8,8 +8,9 @@ class GradeBook:
         self.student_list = []
         self.course_list = []
 
-    def add_student(self, student):
-        self.student_list.append(student)
+    def add_student(self, email, names):
+        new_student = Student(email, names)
+        self.student_list.append(new_student)
 
     def add_course(self, course):
         self.course_list.append(course)
