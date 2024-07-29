@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-
 from gradebook import GradeBook
-from course import Course
 
 def main():
     gradebook = GradeBook()
-
+    
     while True:
         print("""
         1. Add student
@@ -16,21 +14,23 @@ def main():
         6. Generate transcript
         7. Exit
         """)
-        action = input("Choose an action: ")
-
-        if action == '1':
+        
+        choice = input("Choose an action: ")
+        
+        if choice == '1':
             email = input("Enter student email: ")
             names = input("Enter student names: ")
             gradebook.add_student(email, names)
             print("Student added.")
-        elif action == '2':
+        
+        elif choice == '2':
             name = input("Enter course name: ")
-            trimester = input("Enter course trimester: ")
+            trimester = int(input("Enter course trimester: "))
             credits = int(input("Enter course credits: "))
-            course = Course(name, trimester, credits)
-            gradebook.add_course(course)
+            gradebook.add_course(name, trimester, credits)
             print("Course added.")
-        elif action == '3':
+        
+        elif choice == '3':
             email = input("Enter student email: ")
             course_name = input("Enter course name: ")
             grade = float(input("Enter grade: "))
@@ -38,20 +38,24 @@ def main():
                 print("Student registered for course.")
             else:
                 print("Error registering student for course.")
-        elif action == '4':
+        
+        elif choice == '4':
             gradebook.calculate_ranking()
-        elif action == '5':
+        
+        elif choice == '5':
             course_name = input("Enter course name: ")
-            grade_threshold = float(input("Enter minimum grade: "))
-            gradebook.search_by_grade(course_name, grade_threshold)
-        elif action == '6':
+            grade = float(input("Enter grade threshold: "))
+            gradebook.search_by_grade(course_name, grade)
+        
+        elif choice == '6':
             email = input("Enter student email: ")
             gradebook.generate_transcript(email)
-        elif action == '7':
-            print("Exiting...")
+        
+        elif choice == '7':
             break
+        
         else:
-            print("Invalid action. Please choose a valid option.")
+            print("Invalid choice, please try again.")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
