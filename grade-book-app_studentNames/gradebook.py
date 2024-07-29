@@ -8,15 +8,11 @@ class GradeBook:
         self.student_list = []
         self.course_list = []
 
-    def add_student(self, email, names):
-        student = Student(email, names)
+    def add_student(self, student):
         self.student_list.append(student)
-        return student
 
-    def add_course(self, name, trimester, credits):
-        course = Course(name, trimester, credits)
+    def add_course(self, course):
         self.course_list.append(course)
-        return course
 
     def register_student_for_course(self, student_email, course_name, grade):
         student = next((s for s in self.student_list if s.email == student_email), None)
